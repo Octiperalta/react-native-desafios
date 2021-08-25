@@ -21,5 +21,6 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     color: "#FFFF",
+    fontFamily: "poppins-medium",
   },
 });
