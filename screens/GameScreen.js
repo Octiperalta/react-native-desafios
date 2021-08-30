@@ -1,5 +1,13 @@
-import React, { useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Alert,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native";
 import NumberContainer from "../components/NumberContainer";
 
 const generateRandomBetween = (min, max, exclude) => {
@@ -11,14 +19,48 @@ const generateRandomBetween = (min, max, exclude) => {
   if (random === exclude) {
     return generateRandomBetween(min, max, exclude);
   }
-
+  console.log(random);
   return random;
 };
 
-export default function GameScreen({ userOption, handlerStartGame }) {
+export default function GameScreen({ userOption, onGameRestart, onGameOver }) {
   const [currentGuess, setCurrentGuess] = useState(
     generateRandomBetween(1, 100, userOption)
   );
+  const [rounds, setRounds] = useState(0);
+
+  const currentLow = useRef(1);
+  const currentHigh = useRef(100);
+
+  useEffect(() => {
+    if (currentGuess === userOption) onGameOver(rounds);
+  }, [currentGuess, userOption]);
+
+  const handlerNextGuess = direction => {
+    if (
+      (direction === "lower" && currentGuess < userOption) ||
+      (direction === "greater" && currentGuess > userOption)
+    ) {
+      Alert.alert("No mientas", "Tu sabes que no es verdad!", [
+        { text: "disculpa", style: "cancel" },
+      ]);
+      return;
+    }
+
+    if (direction === "lower") {
+      currentHigh.current = currentGuess;
+    } else {
+      currentLow.current = currentGuess;
+    }
+
+    const nextNumber = generateRandomBetween(
+      currentLow.current,
+      currentHigh.current,
+      currentGuess
+    );
+    setCurrentGuess(nextNumber);
+    setRounds(rounds + 1);
+  };
 
   return (
     <View
@@ -33,17 +75,26 @@ export default function GameScreen({ userOption, handlerStartGame }) {
           La suposicion del oponente es:{" "}
         </Text>
         <NumberContainer>{currentGuess}</NumberContainer>
-        <View style={{ flexDirection: "row", justifyContent: "center" }}>
-          <Button title='MENOR' />
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "center",
+            marginTop: Dimensions.get("window").height > 600 ? 20 : 10,
+          }}>
+          <Button
+            title='MENOR'
+            onPress={handlerNextGuess.bind(this, "lower")}
+          />
           <View style={{ marginLeft: 10 }}>
-            <Button title='MAYOR' />
+            <Button
+              title='MAYOR'
+              onPress={handlerNextGuess.bind(this, "greater")}
+            />
           </View>
         </View>
       </View>
       <View style={{ alignSelf: "flex-start", marginHorizontal: 20 }}>
-        <TouchableOpacity
-          style={styles.backToMenu}
-          onPress={() => handlerStartGame(null)}>
+        <TouchableOpacity style={styles.backToMenu} onPress={onGameRestart}>
           <Text
             style={{ textAlign: "center", fontSize: 15, fontWeight: "bold" }}>
             Volver al menu

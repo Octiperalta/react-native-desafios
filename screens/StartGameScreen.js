@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import {
   StyleSheet,
   Text,
-  TextInput,
   View,
   TouchableOpacity,
   TouchableWithoutFeedback,
   Keyboard,
+  Dimensions,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
 } from "react-native";
 import Input from "../components/Input";
 import NumberContainer from "../components/NumberContainer";
@@ -46,47 +49,54 @@ export default function StartGameScreen({ onStartGame }) {
   ) : null;
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.screen}>
-        <Text style={styles.title}>Comenzar el juego</Text>
-        <View style={styles.inputContainer}>
-          <Text
-            style={{
-              fontSize: 16,
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "#333",
-            }}>
-            Elija un numero para comenzar el juego
-          </Text>
-          <Input
-            keyboardType='numeric'
-            blurOnSubmit={true}
-            autoCorrect={false}
-            maxLength={2}
-            autoCapitalize='none'
-            onChangeText={handlerInputNumber}
-            value={enteredValue}
-          />
-          {/* <TextInput /> */}
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              style={{ ...styles.buttonSecondary, marginRight: 10 }}
-              onPress={handlerResetInput}>
-              <Text style={styles.buttonText}>Limpiar</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.buttonSuccess}
-              onPress={handlerConfirmInput}>
-              <Text style={{ ...styles.buttonText, color: "#fff" }}>
-                Confirmar
+    <KeyboardAvoidingView
+      // behavior={"padding"}
+      style={styles.container}
+      keyboardVerticalOffset={20}>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.screen}>
+            <Text style={styles.title}>Comenzar el juego</Text>
+            <View style={styles.inputContainer}>
+              <Text
+                style={{
+                  fontSize: 16,
+                  textAlign: "center",
+                  fontWeight: "bold",
+                  color: "#333",
+                }}>
+                Elija un numero para comenzar el juego
               </Text>
-            </TouchableOpacity>
+              <Input
+                keyboardType='numeric'
+                blurOnSubmit={true}
+                autoCorrect={false}
+                maxLength={2}
+                autoCapitalize='none'
+                onChangeText={handlerInputNumber}
+                value={enteredValue}
+              />
+              {/* <TextInput /> */}
+              <View style={styles.buttonsContainer}>
+                <TouchableOpacity
+                  style={{ ...styles.buttonSecondary, marginRight: 10 }}
+                  onPress={handlerResetInput}>
+                  <Text style={styles.buttonText}>Limpiar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonSuccess}
+                  onPress={handlerConfirmInput}>
+                  <Text style={{ ...styles.buttonText, color: "#fff" }}>
+                    Confirmar
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            {confirmedOutput}
           </View>
-        </View>
-        {confirmedOutput}
-      </View>
-    </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -96,16 +106,20 @@ const styles = StyleSheet.create({
     padding: 10,
     alignItems: "center",
   },
+  container: {
+    flex: 1,
+  },
   title: {
     fontSize: 20,
     fontFamily: "poppins-bold",
     color: "#333",
   },
   inputContainer: {
+    width: "80%",
+    maxWidth: "95%",
+    minWidth: 300,
     marginTop: 20,
-    width: 300,
     padding: 20,
-    maxWidth: "80%",
     alignItems: "center",
     borderRadius: 10,
     borderWidth: 1.5,
@@ -113,7 +127,7 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "center",
   },
   buttonSecondary: {
     backgroundColor: "#fff",
@@ -122,7 +136,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 3,
     alignItems: "center",
-    width: 100,
+    // width: 100,
+    width: Dimensions.get("window").width / 3,
   },
   buttonSuccess: {
     paddingVertical: 8,
@@ -130,7 +145,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 3,
     alignItems: "center",
-    width: 100,
+    // width: 100,
+    width: Dimensions.get("window").width / 3,
+
     backgroundColor: COLORS.success,
   },
   buttonText: {

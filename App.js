@@ -3,6 +3,7 @@ import { StyleSheet, View } from "react-native";
 import Header from "./components/Header";
 import GameScreen from "./screens/GameScreen";
 import StartGameScreen from "./screens/StartGameScreen";
+import GameOverScreen from "./screens/GameOverScreen";
 import { useFonts } from "expo-font";
 import AppLoading from "expo-app-loading";
 
@@ -12,16 +13,38 @@ export default function App() {
     "poppins-bold": require("./assets/fonts/Poppins-Bold.ttf"),
     "poppins-medium": require("./assets/fonts/Poppins-Medium.ttf"),
   });
+  const [guessRounds, setGuessRounds] = useState(0);
 
   const handlerStartGame = selectedNumber => {
     setUserNumber(selectedNumber);
   };
 
+  const handlerGameOver = rounds => {
+    setGuessRounds(rounds);
+  };
+
+  const restartGame = () => {
+    setGuessRounds(0);
+    setUserNumber(null);
+  };
+
   let content = <StartGameScreen onStartGame={handlerStartGame} />;
 
-  if (userNumber) {
+  if (userNumber && guessRounds <= 0) {
     content = (
-      <GameScreen userOption={userNumber} handlerStartGame={handlerStartGame} />
+      <GameScreen
+        userOption={userNumber}
+        onGameRestart={restartGame}
+        onGameOver={handlerGameOver}
+      />
+    );
+  } else if (guessRounds) {
+    content = (
+      <GameOverScreen
+        rounds={guessRounds}
+        onRestart={restartGame}
+        choice={userNumber}
+      />
     );
   }
 
