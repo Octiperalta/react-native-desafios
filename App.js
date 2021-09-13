@@ -3,6 +3,8 @@ import { useFonts } from "expo-font";
 import React from "react";
 import { StyleSheet, View } from "react-native";
 import BreadNavigator from "./navigation/BreadNavigator";
+import { Provider } from "react-redux";
+import store from "./store";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -14,7 +16,11 @@ export default function App() {
 
   if (!loaded) return <AppLoading />;
 
-  return <BreadNavigator />;
+  return (
+    <Provider store={store}>
+      <BreadNavigator />
+    </Provider>
+  );
 }
 
 const styles = StyleSheet.create({

@@ -1,16 +1,33 @@
-import React from "react";
-import { Button, StyleSheet, View } from "react-native";
-import Text from "../components/CustomText";
+import React, { useEffect } from "react";
+import { FlatList, StyleSheet } from "react-native";
+import BreadItem from "../components/BreadItem";
+import { useDispatch, useSelector } from "react-redux";
+import { filterBreads, selectBread } from "../store/actions/bread.actions";
 
-export default function CategoryBreadScreen({ navigation }) {
+export default function CategoryBreadScreen({ navigation, route }) {
+  const dispatch = useDispatch();
+  const categoryID = useSelector(state => state.categories.selectedID);
+  const breads = useSelector(state => state.breads.filteredBreads);
+
+  const handleSelected = item => {
+    dispatch(selectBread(item.id));
+    navigation.navigate("Detail", { name: item.name });
+  };
+
+  const renderItemBread = ({ item }) => (
+    <BreadItem item={item} onSelected={handleSelected} />
+  );
+
+  useEffect(() => {
+    dispatch(filterBreads(categoryID));
+  }, [categoryID]);
+
   return (
-    <View style={styles.container}>
-      <Text fontWeight='bold'>Products Screen</Text>
-      <Button
-        title='Go to details'
-        onPress={() => navigation.navigate("Detail")}
-      />
-    </View>
+    <FlatList
+      data={breads}
+      keyExtractor={item => item.id}
+      renderItem={renderItemBread}
+    />
   );
 }
 

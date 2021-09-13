@@ -1,16 +1,29 @@
 import React from "react";
-import { Button, StyleSheet, View } from "react-native";
-import Text from "../components/CustomText";
+import { FlatList, StyleSheet } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import GridItem from "../components/GridItem";
+import { selectCategory } from "../store/actions/category.actions";
 
-export default function CategoriesScreen({ navigation }) {
+export default function CategoriesScreen({ navigation, route }) {
+  const dispatch = useDispatch();
+  const categories = useSelector(state => state.categories.list);
+
+  const handleSelectedCategory = item => {
+    dispatch(selectCategory(item.id));
+    navigation.navigate("Products", { name: item.title });
+  };
+
+  const renderGridItem = data => (
+    <GridItem item={data.item} onSelected={handleSelectedCategory} />
+  );
+
   return (
-    <View style={styles.container}>
-      <Text fontWeight='bold'>Categories Screen</Text>
-      <Button
-        title='Go to products'
-        onPress={() => navigation.navigate("Products")}
-      />
-    </View>
+    <FlatList
+      data={categories}
+      keyExtractor={item => item.id}
+      renderItem={renderGridItem}
+      numColumns={2}
+    />
   );
 }
 const styles = StyleSheet.create({
