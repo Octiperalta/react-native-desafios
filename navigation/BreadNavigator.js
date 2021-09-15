@@ -8,6 +8,7 @@ import BreadDetailScreen from "../screens/BreadDetailScreen";
 import COLORS from "../constants/colors";
 import { Platform } from "react-native";
 import CategoryBreadScreen from "../screens/CategoryBreadScreen";
+import CartScreen from "../screens/CartScreen";
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -44,6 +45,12 @@ export default function BreadNavigator() {
           options={({ route }) => ({
             title: route.params.name,
           })}
+        />
+
+        <Stack.Screen
+          name='Cart'
+          component={CartScreen}
+          options={{ title: "Carrito" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

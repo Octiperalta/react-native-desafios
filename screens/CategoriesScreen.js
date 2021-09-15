@@ -1,8 +1,10 @@
 import React from "react";
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, View } from "react-native";
+import { FAB } from "react-native-elements/dist/buttons/FAB";
 import { useDispatch, useSelector } from "react-redux";
 import GridItem from "../components/GridItem";
 import { selectCategory } from "../store/actions/category.actions";
+import { AntDesign } from "@expo/vector-icons";
 
 export default function CategoriesScreen({ navigation, route }) {
   const dispatch = useDispatch();
@@ -18,19 +20,22 @@ export default function CategoriesScreen({ navigation, route }) {
   );
 
   return (
-    <FlatList
-      data={categories}
-      keyExtractor={item => item.id}
-      renderItem={renderGridItem}
-      numColumns={2}
-    />
+    <View style={styles.container}>
+      <FlatList
+        data={categories}
+        keyExtractor={item => item.id}
+        renderItem={renderGridItem}
+        numColumns={2}
+      />
+      <FAB
+        icon={<AntDesign name='shoppingcart' size={24} color='#fff' />}
+        placement='right'
+        color={"#333"}
+        onPress={() => navigation.navigate("Cart")}
+      />
+    </View>
   );
 }
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  container: { flex: 1 },
 });

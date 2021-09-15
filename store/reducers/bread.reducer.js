@@ -1,13 +1,13 @@
 import { BREADS } from "../../data/breads";
 import { FILTER_BREAD, SELECT_BREAD } from "../actions/bread.actions";
 
-const initialState = {
+const INITIAL_STATE = {
   list: BREADS,
   filteredBreads: [],
   selectedID: null,
 };
 
-const BreadReducer = (state = initialState, action) => {
+const BreadReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SELECT_BREAD:
       return { ...state, selectedID: action.breadID };
