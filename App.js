@@ -2,9 +2,9 @@ import AppLoading from "expo-app-loading";
 import { useFonts } from "expo-font";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import BreadNavigator from "./navigation/BreadNavigator";
 import { Provider } from "react-redux";
 import store from "./store";
+import MainNavigator from "./navigation";
 
 export default function App() {
   const [loaded] = useFonts({
@@ -18,7 +18,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <BreadNavigator />
+      <MainNavigator />
     </Provider>
   );
 }

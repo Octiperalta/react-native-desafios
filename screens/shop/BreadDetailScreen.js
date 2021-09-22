@@ -2,9 +2,9 @@ import React from "react";
 import { Button, StyleSheet, View } from "react-native";
 import { FAB } from "react-native-elements/dist/buttons/FAB";
 import { useDispatch, useSelector } from "react-redux";
-import Text from "../components/CustomText";
+import Text from "../../components/CustomText";
 import { Entypo } from "@expo/vector-icons";
-import { addItem } from "../store/actions/cart.actions";
+import { addItem } from "../../store/actions/cart.actions";
 
 export default function BreadDetailScreen({ navigation, route }) {
   // const bread = BREADS.find(item => item.id === route.params.productID);

@@ -7,15 +7,15 @@ export const CONFIRM_CART = "CONFIRM_CART";
 export const addItem = item => ({ type: ADD_ITEM, item });
 export const removeItem = itemID => ({ type: REMOVE_ITEM, itemID });
 
-export const confirmCart = payload => {
+export const confirmCart = (payload, userId) => {
   return async dispatch => {
     try {
-      const response = await fetch(`${URL_API}/cart.json`, {
+      const response = await fetch(`${URL_API}/orders.json`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ date: Date.now(), items: { ...payload } }),
+        body: JSON.stringify({ date: Date.now(), userId, items: { ...payload } }),
       });
 
       const data = await response.json();

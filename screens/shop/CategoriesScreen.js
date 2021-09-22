@@ -2,8 +2,8 @@ import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { FAB } from "react-native-elements/dist/buttons/FAB";
 import { useDispatch, useSelector } from "react-redux";
-import GridItem from "../components/GridItem";
-import { selectCategory } from "../store/actions/category.actions";
+import GridItem from "../../components/GridItem";
+import { selectCategory } from "../../store/actions/category.actions";
 import { AntDesign } from "@expo/vector-icons";
 
 export default function CategoriesScreen({ navigation, route }) {
@@ -26,12 +26,6 @@ export default function CategoriesScreen({ navigation, route }) {
         keyExtractor={item => item.id}
         renderItem={renderGridItem}
         numColumns={2}
-      />
-      <FAB
-        icon={<AntDesign name='shoppingcart' size={24} color='#fff' />}
-        placement='right'
-        color={"#333"}
-        onPress={() => navigation.navigate("Cart")}
       />
     </View>
   );
